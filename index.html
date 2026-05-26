@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Road Safety App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Search Panel -->
+    <div id="search-panel">
+
+        <!-- Origin Input -->
+        <div class="input-wrapper">
+            <span class="icon">📍</span>
+            <input id="origin" type="text" placeholder="Your location"/>
+            <button id="locate-btn">Use My Location</button>
+        </div>
+
+        <!-- Destination Input -->
+        <div class="input-wrapper">
+            <span class="icon">🏁</span>
+            <input id="destination" type="text" placeholder="Enter destination"/>
+        </div>
+
+        <!-- Search Button -->
+        <button id="search-btn">Find Safest Route</button>
+
+    </div>
+
+    <!-- Map -->
+    <div id="map"></div>
+
+    <!-- Route Results Panel -->
+    <div id="results-panel">
+        <h3 id="results-title">Routes will appear here</h3>
+        <div id="route-cards"></div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRbEGZTPmJiot3afVrvtyHDUyRhP4lRRQ&libraries=places&callback=initMap" async defer></script>
+
+</body>
+</html>
