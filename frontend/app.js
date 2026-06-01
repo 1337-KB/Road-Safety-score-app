@@ -7,7 +7,42 @@ function initMap() {
     });
 
     setupAutocomplete();
+    setupButtons();
 }
+
+
+function setupButtons() {
+    document.getElementById("locate-btn").addEventListener("click", () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                map.setCenter({ lat, lng });
+                map.setZoom(14);
+                document.getElementById("origin").value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+                new google.maps.Marker({
+                    position: { lat, lng },
+                    map: map,
+                    title: "You are here"
+                });
+            });
+        }
+    });
+
+    document.getElementById("search-btn").addEventListener("click", () => {
+    const origin = document.getElementById("origin").value;
+    const destination = document.getElementById("destination").value;
+
+    if (!origin || !destination) {
+        alert("Please enter both fields");
+        return;
+    }
+
+    findSafeRoutes();
+    // Route drawing comes next
+    });
+}
+
 
 function setupAutocomplete() {
     const originInput = document.getElementById("origin");
@@ -22,60 +57,8 @@ function setupAutocomplete() {
     });
 }
 
-document.getElementById("locate-btn").addEventListener("click", () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            map.setCenter({ lat, lng });
-            map.setZoom(14);
-
-            document.getElementById("origin").value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-
-            new google.maps.Marker({
-                position: { lat, lng },
-                map: map,
-                title: "You are here"
-            });
-        });
-    }
-});
 
 
-document.getElementById("locate-btn").addEventListener("click", () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            map.setCenter({ lat, lng });
-            map.setZoom(14);
-
-            document.getElementById("origin").value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-
-            new google.maps.Marker({
-                position: { lat, lng },
-                map: map,
-                title: "You are here"
-            });
-        });
-    }
-});
-
-
-document.getElementById("search-btn").addEventListener("click", () => {
-    const origin = document.getElementById("origin").value;
-    const destination = document.getElementById("destination").value;
-
-    if (!origin || !destination) {
-        alert("Please enter both fields");
-        return;
-    }
-
-    console.log("Searching route from", origin, "to", destination);
-    // Route drawing comes next
-});
 
 function displayRouteCards(routes, safetyScores) {
 
@@ -146,7 +129,7 @@ function findSafeRoutes() {
             drawRoutesOnMap(result, top3);
 
             // Step 5 — Show recommendation cards
-            displayRouteCards(top3);
+            displayRouteCards(top3.map(r => r.route), top3.map(r => r.safetyScore));
         }
     });
 }
